@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1041055813008",
+    "project_id": "emmi-nail-app",
+    "storage_bucket": "emmi-nail-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1041055813008:android:5655537c67edd4e04eb715",
+        "android_client_info": {
+          "package_name": "com.emminail.app.emmi_nail_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBk-kFHc34Y3Ye-tpcOjkCpYoBAN1H2k5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
