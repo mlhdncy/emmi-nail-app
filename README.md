@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 💅 Emmi Nail App
 
 Emmi Nail - Firebase destekli güzellik sektörü mobil ve web uygulaması.
@@ -309,3 +310,7 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 **💅 Emmi Nail App ile güzellik dünyasının dijital deneyimini yaşayın!**
 
 *Bu uygulama modern Flutter teknolojileri ve Firebase backend altyapısı ile geliştirilmiştir.*
+=======
+# emmi-nail-app
+Emmi Nail App, güzellik sektörüne özel olarak tasarlanmış modern bir Flutter  uygulamasıdır.
+>>>>>>> ecb23339fc7304c7b7b7ede0573990c854ed5855
