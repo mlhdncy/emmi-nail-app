@@ -4,10 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'theme/app_theme.dart';
 import 'widgets/emmi_logo.dart';
 import 'widgets/angled_lines_painter.dart';
-import 'firebase_options.dart';
+import 'firebase_options_secure.dart';
 import 'providers/language_provider.dart';
 import 'providers/appointment_provider.dart';
 import 'providers/user_provider.dart';
@@ -25,6 +26,10 @@ import 'dart:html' as html show window;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Load environment variables
+  await dotenv.load(fileName: ".env");
+  
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(
