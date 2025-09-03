@@ -37,6 +37,8 @@ class _ProfilePageState extends State<ProfilePage> {
     // Kullanıcı bilgilerini yükle
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
+      print('Profile page - isLoggedIn: ${userProvider.isLoggedIn}');
+      print('Profile page - currentUser: ${userProvider.currentUser?.name}');
       if (userProvider.isLoggedIn) {
         _loadUserData(userProvider);
       }

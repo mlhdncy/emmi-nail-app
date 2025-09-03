@@ -1,37 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users collection - sadece kendi profilini okuyabilir/düzenleyebilir
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-    
-    // Services collection - herkes okuyabilir, sadece admin yazabilir
-    match /services/{serviceId} {
-      allow read: if true;
-      allow write: if request.auth != null && 
-                   get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-    }
-    
-    // Appointments collection - sadece kendi randevularını görebilir
-    match /appointments/{appointmentId} {
-      allow read, write: if request.auth != null && 
-                        (resource.data.userId == request.auth.uid || 
-                         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
-    }
-    
-    // Products collection - herkes okuyabilir, sadece admin yazabilir
-    match /products/{productId} {
-      allow read: if true;
-      allow write: if request.auth != null && 
-                   get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-    }
-    
-    // Gallery collection - authenticated kullanıcılar okuyabilir, sadece admin yazabilir
-    match /gallery/{galleryId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && 
-                   get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    // GEÇİCİ - TÜM ERİŞİMLERE İZİN VER (TEST İÇİN)
+    match /{document=**} {
+      allow read, write: if true;
     }
   }
 }

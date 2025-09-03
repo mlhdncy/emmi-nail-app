@@ -142,12 +142,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
       _isLoading = false;
     });
 
-    if (result != null) {
+    if (result['success']) {
       if (mounted) {
         Navigator.of(context).popUntil((route) => route.isFirst); // Ana sayfaya dön
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Kayıt başarılı! Hoş geldiniz.'),
+          SnackBar(
+            content: Text(result['message']),
             backgroundColor: AppColors.success,
           ),
         );
@@ -155,8 +155,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
     } else {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Kayıt başarısız. Lütfen tekrar deneyin.'),
+          SnackBar(
+            content: Text(result['message']),
             backgroundColor: AppColors.error,
           ),
         );

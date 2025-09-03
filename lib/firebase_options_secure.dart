@@ -44,38 +44,40 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static FirebaseOptions get web => FirebaseOptions(
-    apiKey: dotenv.env['FIREBASE_WEB_API_KEY'] ?? '',
-    appId: dotenv.env['FIREBASE_WEB_APP_ID'] ?? '',
-    messagingSenderId: dotenv.env['FIREBASE_WEB_MESSAGING_SENDER_ID'] ?? '',
-    projectId: dotenv.env['FIREBASE_WEB_PROJECT_ID'] ?? '',
-    authDomain: dotenv.env['FIREBASE_WEB_AUTH_DOMAIN'] ?? '',
-    storageBucket: dotenv.env['FIREBASE_WEB_STORAGE_BUCKET'] ?? '',
+  // Web için direkt değerler (Web'de .env dosyası sorunlu olabiliyor)
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDwhcHFozLviX8RSvQ-eTuA3F53mc9cn60',
+    appId: '1:1041055813008:web:824ac2056b9ded9e4eb715',
+    messagingSenderId: '1041055813008',
+    projectId: 'emmi-nail-app',
+    authDomain: 'emmi-nail-app.firebaseapp.com',
+    storageBucket: 'emmi-nail-app.firebasestorage.app',
   );
 
+  // Mobile için environment variables
   static FirebaseOptions get android => FirebaseOptions(
-    apiKey: dotenv.env['FIREBASE_ANDROID_API_KEY'] ?? '',
-    appId: dotenv.env['FIREBASE_ANDROID_APP_ID'] ?? '',
-    messagingSenderId: dotenv.env['FIREBASE_WEB_MESSAGING_SENDER_ID'] ?? '',
-    projectId: dotenv.env['FIREBASE_WEB_PROJECT_ID'] ?? '',
-    storageBucket: dotenv.env['FIREBASE_WEB_STORAGE_BUCKET'] ?? '',
+    apiKey: dotenv.env['FIREBASE_ANDROID_API_KEY'] ?? 'AIzaSyBk-kFHc34Y3Ye-tpcOjkCpYoBAN1H2k5s',
+    appId: dotenv.env['FIREBASE_ANDROID_APP_ID'] ?? '1:1041055813008:android:5655537c67edd4e04eb715',
+    messagingSenderId: dotenv.env['FIREBASE_WEB_MESSAGING_SENDER_ID'] ?? '1041055813008',
+    projectId: dotenv.env['FIREBASE_WEB_PROJECT_ID'] ?? 'emmi-nail-app',
+    storageBucket: dotenv.env['FIREBASE_WEB_STORAGE_BUCKET'] ?? 'emmi-nail-app.firebasestorage.app',
   );
 
   static FirebaseOptions get ios => FirebaseOptions(
-    apiKey: dotenv.env['FIREBASE_IOS_API_KEY'] ?? '',
-    appId: dotenv.env['FIREBASE_IOS_APP_ID'] ?? '',
-    messagingSenderId: dotenv.env['FIREBASE_WEB_MESSAGING_SENDER_ID'] ?? '',
-    projectId: dotenv.env['FIREBASE_WEB_PROJECT_ID'] ?? '',
-    storageBucket: dotenv.env['FIREBASE_WEB_STORAGE_BUCKET'] ?? '',
-    iosBundleId: dotenv.env['FIREBASE_IOS_BUNDLE_ID'] ?? '',
+    apiKey: dotenv.env['FIREBASE_IOS_API_KEY'] ?? 'AIzaSyC9yghChemjLNpfLKdOkzwjKonpaIorcLQ',
+    appId: dotenv.env['FIREBASE_IOS_APP_ID'] ?? '1:1041055813008:ios:e94b49d3b7e77e974eb715',
+    messagingSenderId: dotenv.env['FIREBASE_WEB_MESSAGING_SENDER_ID'] ?? '1041055813008',
+    projectId: dotenv.env['FIREBASE_WEB_PROJECT_ID'] ?? 'emmi-nail-app',
+    storageBucket: dotenv.env['FIREBASE_WEB_STORAGE_BUCKET'] ?? 'emmi-nail-app.firebasestorage.app',
+    iosBundleId: dotenv.env['FIREBASE_IOS_BUNDLE_ID'] ?? 'com.emminail.app.emmiNailApp',
   );
 
   static FirebaseOptions get macos => FirebaseOptions(
-    apiKey: dotenv.env['FIREBASE_MACOS_API_KEY'] ?? '',
-    appId: dotenv.env['FIREBASE_MACOS_APP_ID'] ?? '',
-    messagingSenderId: dotenv.env['FIREBASE_WEB_MESSAGING_SENDER_ID'] ?? '',
-    projectId: dotenv.env['FIREBASE_WEB_PROJECT_ID'] ?? '',
-    storageBucket: dotenv.env['FIREBASE_WEB_STORAGE_BUCKET'] ?? '',
-    iosBundleId: dotenv.env['FIREBASE_MACOS_BUNDLE_ID'] ?? '',
+    apiKey: dotenv.env['FIREBASE_MACOS_API_KEY'] ?? 'your-macos-api-key',
+    appId: dotenv.env['FIREBASE_MACOS_APP_ID'] ?? 'your-macos-app-id',
+    messagingSenderId: dotenv.env['FIREBASE_WEB_MESSAGING_SENDER_ID'] ?? '1041055813008',
+    projectId: dotenv.env['FIREBASE_WEB_PROJECT_ID'] ?? 'emmi-nail-app',
+    storageBucket: dotenv.env['FIREBASE_WEB_STORAGE_BUCKET'] ?? 'emmi-nail-app.firebasestorage.app',
+    iosBundleId: dotenv.env['FIREBASE_MACOS_BUNDLE_ID'] ?? 'com.emmi.nail.app',
   );
 }

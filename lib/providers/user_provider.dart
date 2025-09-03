@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
@@ -20,9 +22,12 @@ class UserProvider extends ChangeNotifier {
   // Kullanıcı giriş durumunu dinle
   void initUserListener() {
     _authService.authStateChanges.listen((user) async {
+      print('Auth state changed: ${user?.uid}');
       if (user != null) {
+        print('User logged in, loading user data...');
         await loadUserData();
       } else {
+        print('User logged out');
         _currentUser = null;
         notifyListeners();
       }
@@ -34,13 +39,19 @@ class UserProvider extends ChangeNotifier {
     final user = _authService.currentUser;
     if (user == null) return;
 
+    print('Loading user data for: ${user.uid}');
     _isLoading = true;
     notifyListeners();
 
     try {
       final userData = await _authService.getUserData();
       if (userData != null) {
+        print('User data loaded successfully: ${userData['name']}');
         _currentUser = UserModel.fromMap(userData);
+      } else {
+        print('No user data found in Firestore, creating default user data...');
+        // Kullanıcı verisi yoksa, default veri oluştur
+        await _createDefaultUserData(user);
       }
     } catch (e) {
       print('Error loading user data: $e');
@@ -48,6 +59,53 @@ class UserProvider extends ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+  }
+
+  // Default kullanıcı verisi oluştur
+  Future<void> _createDefaultUserData(User user) async {
+    try {
+      final defaultUserData = <String, dynamic>{
+        'uid': user.uid,
+        'email': user.email ?? '',
+        'name': user.displayName ?? 'Kullanıcı',
+        'phone': '',
+        'address': '',
+        'city': '',
+        'createdAt': FieldValue.serverTimestamp(),
+        'role': 'customer',
+        'isActive': true,
+        'preferences': <String, dynamic>{},
+      };
+
+      // Firestore'a kaydet
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .set(defaultUserData);
+
+      print('Default user data created successfully');
+      
+      // UserModel için safe data oluştur
+      final userModelData = <String, dynamic>{
+        'uid': user.uid,
+        'email': user.email ?? '',
+        'name': user.displayName ?? 'Kullanıcı',
+        'phone': '',
+        'address': '',
+        'city': '',
+        'createdAt': DateTime.now(),
+        'role': 'customer',
+        'isActive': true,
+        'preferences': <String, dynamic>{},
+      };
+      
+      // UserModel oluştur
+      _currentUser = UserModel.fromMap(userModelData);
+      notifyListeners();
+      
+    } catch (e) {
+      print('Error creating default user data: $e');
+    }
   }
 
   // Kullanıcı profili güncelle

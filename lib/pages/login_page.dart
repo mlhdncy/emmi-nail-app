@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/language_provider.dart';
+import '../providers/user_provider.dart';
 import '../theme/app_theme.dart';
 import '../widgets/emmi_logo.dart';
 import '../widgets/angled_lines_painter.dart';
@@ -44,15 +45,22 @@ class _LoginPageState extends State<LoginPage> {
         _isLoading = false;
       });
 
-      if (result != null) {
+      if (result['success']) {
         if (mounted) {
+          // UserProvider'ın auth listener'ı kullanıcı durumunu güncelleyecek
           Navigator.of(context).pop(); // Ana sayfaya geri dön
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(result['message']),
+              backgroundColor: AppColors.success,
+            ),
+          );
         }
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Giriş başarısız. Email ve şifrenizi kontrol edin.'),
+            SnackBar(
+              content: Text(result['message']),
               backgroundColor: AppColors.error,
             ),
           );

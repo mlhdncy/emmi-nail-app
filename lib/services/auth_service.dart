@@ -12,21 +12,35 @@ class AuthService {
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   // Sign in with email and password
-  Future<UserCredential?> signInWithEmailAndPassword(String email, String password) async {
+  Future<Map<String, dynamic>> signInWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return result;
+      return {'success': true, 'user': result, 'message': 'Giriş başarılı'};
     } catch (e) {
       print('Sign in error: $e');
-      return null;
+      String errorMessage = 'Giriş başarısız';
+      
+      if (e.toString().contains('user-not-found')) {
+        errorMessage = 'Bu email adresi ile kayıtlı kullanıcı bulunamadı';
+      } else if (e.toString().contains('wrong-password')) {
+        errorMessage = 'Yanlış şifre';
+      } else if (e.toString().contains('invalid-email')) {
+        errorMessage = 'Geçersiz email adresi';
+      } else if (e.toString().contains('user-disabled')) {
+        errorMessage = 'Bu hesap devre dışı bırakılmış';
+      } else if (e.toString().contains('network-request-failed')) {
+        errorMessage = 'İnternet bağlantı sorunu';
+      }
+      
+      return {'success': false, 'user': null, 'message': errorMessage};
     }
   }
 
   // Register with email and password
-  Future<UserCredential?> registerWithEmailAndPassword(
+  Future<Map<String, dynamic>> registerWithEmailAndPassword(
     String email,
     String password,
     String name,
@@ -54,10 +68,22 @@ class AuthService {
         });
       }
 
-      return result;
+      return {'success': true, 'user': result, 'message': 'Kayıt başarılı'};
     } catch (e) {
       print('Registration error: $e');
-      return null;
+      String errorMessage = 'Kayıt başarısız';
+      
+      if (e.toString().contains('email-already-in-use')) {
+        errorMessage = 'Bu email adresi zaten kullanımda';
+      } else if (e.toString().contains('weak-password')) {
+        errorMessage = 'Şifre çok zayıf (en az 6 karakter)';
+      } else if (e.toString().contains('invalid-email')) {
+        errorMessage = 'Geçersiz email adresi';
+      } else if (e.toString().contains('network-request-failed')) {
+        errorMessage = 'İnternet bağlantı sorunu';
+      }
+      
+      return {'success': false, 'user': null, 'message': errorMessage};
     }
   }
 

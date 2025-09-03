@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart';
@@ -27,8 +28,14 @@ import 'dart:html' as html show window;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Load environment variables
-  await dotenv.load(fileName: ".env");
+  // Load environment variables (only for mobile platforms)
+  if (!kIsWeb) {
+    try {
+      await dotenv.load(fileName: ".env");
+    } catch (e) {
+      debugPrint("Environment file not found, using fallback values");
+    }
+  }
   
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
@@ -61,8 +68,55 @@ class EmmiNailApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: const HomePage(),
+      home: const AuthWrapper(),
     );
+  }
+}
+
+// Authentication state'ine göre sayfa yönlendiren wrapper
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        // Loading durumunda spinner göster
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            backgroundColor: AppColors.emmiWhite,
+            body: Center(
+              child: CircularProgressIndicator(
+                color: AppColors.emmiRed,
+              ),
+            ),
+          );
+        }
+        
+        // Firebase Auth'dan direkt kullanıcı bilgisi al
+        if (snapshot.hasData && snapshot.data != null) {
+          // Kullanıcı var, UserProvider'ı güncelle
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            final userProvider = Provider.of<UserProvider>(context, listen: false);
+            userProvider.loadUserData();
+          });
+          return const HomePage();
+        } else {
+          return const WelcomePage();
+        }
+      },
+    );
+  }
+}
+
+// Welcome sayfası - giriş yapmamış kullanıcılar için
+class WelcomePage extends StatelessWidget {
+  const WelcomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const HomePage(); // Şimdilik ana sayfayı göster
   }
 }
 
