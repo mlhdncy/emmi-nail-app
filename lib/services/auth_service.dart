@@ -12,7 +12,10 @@ class AuthService {
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   // Sign in with email and password
-  Future<Map<String, dynamic>> signInWithEmailAndPassword(String email, String password) async {
+  Future<Map<String, dynamic>> signInWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email,
@@ -22,7 +25,7 @@ class AuthService {
     } catch (e) {
       print('Sign in error: $e');
       String errorMessage = 'Giriş başarısız';
-      
+
       if (e.toString().contains('user-not-found')) {
         errorMessage = 'Bu email adresi ile kayıtlı kullanıcı bulunamadı';
       } else if (e.toString().contains('wrong-password')) {
@@ -34,7 +37,7 @@ class AuthService {
       } else if (e.toString().contains('network-request-failed')) {
         errorMessage = 'İnternet bağlantı sorunu';
       }
-      
+
       return {'success': false, 'user': null, 'message': errorMessage};
     }
   }
@@ -56,7 +59,7 @@ class AuthService {
       if (user != null) {
         // Update display name
         await user.updateDisplayName(name);
-        
+
         // Create user document in Firestore
         await _firestore.collection('users').doc(user.uid).set({
           'uid': user.uid,
@@ -72,7 +75,7 @@ class AuthService {
     } catch (e) {
       print('Registration error: $e');
       String errorMessage = 'Kayıt başarısız';
-      
+
       if (e.toString().contains('email-already-in-use')) {
         errorMessage = 'Bu email adresi zaten kullanımda';
       } else if (e.toString().contains('weak-password')) {
@@ -82,7 +85,7 @@ class AuthService {
       } else if (e.toString().contains('network-request-failed')) {
         errorMessage = 'İnternet bağlantı sorunu';
       }
-      
+
       return {'success': false, 'user': null, 'message': errorMessage};
     }
   }
@@ -112,7 +115,10 @@ class AuthService {
     try {
       User? user = currentUser;
       if (user != null) {
-        DocumentSnapshot doc = await _firestore.collection('users').doc(user.uid).get();
+        DocumentSnapshot doc = await _firestore
+            .collection('users')
+            .doc(user.uid)
+            .get();
         return doc.data() as Map<String, dynamic>?;
       }
       return null;
@@ -128,12 +134,12 @@ class AuthService {
       User? user = currentUser;
       if (user != null) {
         await _firestore.collection('users').doc(user.uid).update(data);
-        
+
         // Update display name if provided
         if (data['name'] != null) {
           await user.updateDisplayName(data['name']);
         }
-        
+
         return true;
       }
       return false;

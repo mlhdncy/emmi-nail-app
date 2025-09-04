@@ -84,7 +84,7 @@ class UserProvider extends ChangeNotifier {
           .set(defaultUserData);
 
       print('Default user data created successfully');
-      
+
       // UserModel için safe data oluştur
       final userModelData = <String, dynamic>{
         'uid': user.uid,
@@ -98,11 +98,10 @@ class UserProvider extends ChangeNotifier {
         'isActive': true,
         'preferences': <String, dynamic>{},
       };
-      
+
       // UserModel oluştur
       _currentUser = UserModel.fromMap(userModelData);
       notifyListeners();
-      
     } catch (e) {
       print('Error creating default user data: $e');
     }

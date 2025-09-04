@@ -16,12 +16,12 @@ class RegistrationPage extends StatefulWidget {
 class _RegistrationPageState extends State<RegistrationPage> {
   final PageController _pageController = PageController();
   final _authService = AuthService();
-  
+
   // Form keys
   final _personalInfoKey = GlobalKey<FormState>();
   final _contactInfoKey = GlobalKey<FormState>();
   final _accountInfoKey = GlobalKey<FormState>();
-  
+
   // Controllers
   final _nameController = TextEditingController();
   final _surnameController = TextEditingController();
@@ -32,7 +32,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  
+
   int _currentStep = 0;
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -58,7 +58,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now().subtract(const Duration(days: 6570)), // 18 yaş
+      initialDate: DateTime.now().subtract(
+        const Duration(days: 6570),
+      ), // 18 yaş
       firstDate: DateTime(1950),
       lastDate: DateTime.now(),
       builder: (context, child) {
@@ -75,18 +77,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
         );
       },
     );
-    
+
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
-        _birthDateController.text = "${picked.day}/${picked.month}/${picked.year}";
+        _birthDateController.text =
+            "${picked.day}/${picked.month}/${picked.year}";
       });
     }
   }
 
   void _nextStep() {
     bool isValid = false;
-    
+
     switch (_currentStep) {
       case 0:
         isValid = _personalInfoKey.currentState!.validate();
@@ -102,7 +105,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         }
         break;
     }
-    
+
     if (isValid && _currentStep < 2) {
       setState(() {
         _currentStep++;
@@ -144,7 +147,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
     if (result['success']) {
       if (mounted) {
-        Navigator.of(context).popUntil((route) => route.isFirst); // Ana sayfaya dön
+        Navigator.of(
+          context,
+        ).popUntil((route) => route.isFirst); // Ana sayfaya dön
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(result['message']),
@@ -192,12 +197,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
-                      const EmmiLogo(
-                        fontSize: 32,
-                        color: AppColors.emmiWhite,
-                      ),
+                      const EmmiLogo(fontSize: 32, color: AppColors.emmiWhite),
                       const SizedBox(height: 20),
-                      
+
                       // Progress Indicator
                       Row(
                         children: List.generate(3, (index) {
@@ -209,8 +211,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               ),
                               height: 4,
                               decoration: BoxDecoration(
-                                color: index <= _currentStep 
-                                    ? AppColors.emmiWhite 
+                                color: index <= _currentStep
+                                    ? AppColors.emmiWhite
                                     : AppColors.emmiWhite.withOpacity(0.3),
                                 borderRadius: BorderRadius.circular(2),
                               ),
@@ -261,7 +263,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             onPressed: _previousStep,
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppColors.emmiWhite,
-                              side: const BorderSide(color: AppColors.emmiWhite),
+                              side: const BorderSide(
+                                color: AppColors.emmiWhite,
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -276,9 +280,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             ),
                           ),
                         ),
-                      
+
                       if (_currentStep > 0) const SizedBox(width: 16),
-                      
+
                       Expanded(
                         child: ElevatedButton(
                           onPressed: _isLoading ? null : _nextStep,
@@ -300,8 +304,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   ),
                                 )
                               : Text(
-                                  _currentStep == 2 
-                                      ? languageProvider.getTranslation('complete_registration')
+                                  _currentStep == 2
+                                      ? languageProvider.getTranslation(
+                                          'complete_registration',
+                                        )
                                       : languageProvider.getTranslation('next'),
                                   style: const TextStyle(
                                     fontFamily: 'Silka',
@@ -362,19 +368,25 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
             ),
             const SizedBox(height: 30),
-            
+
             // Name
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
                 labelText: languageProvider.getTranslation('name'),
-                prefixIcon: const Icon(Icons.person_outline, color: AppColors.emmiRed),
+                prefixIcon: const Icon(
+                  Icons.person_outline,
+                  color: AppColors.emmiRed,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppColors.emmiRed, width: 2),
+                  borderSide: const BorderSide(
+                    color: AppColors.emmiRed,
+                    width: 2,
+                  ),
                 ),
               ),
               validator: (value) {
@@ -384,21 +396,27 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Surname
             TextFormField(
               controller: _surnameController,
               decoration: InputDecoration(
                 labelText: languageProvider.getTranslation('surname'),
-                prefixIcon: const Icon(Icons.person_outline, color: AppColors.emmiRed),
+                prefixIcon: const Icon(
+                  Icons.person_outline,
+                  color: AppColors.emmiRed,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppColors.emmiRed, width: 2),
+                  borderSide: const BorderSide(
+                    color: AppColors.emmiRed,
+                    width: 2,
+                  ),
                 ),
               ),
               validator: (value) {
@@ -408,9 +426,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Birth Date
             TextFormField(
               controller: _birthDateController,
@@ -418,14 +436,23 @@ class _RegistrationPageState extends State<RegistrationPage> {
               onTap: () => _selectDate(context),
               decoration: InputDecoration(
                 labelText: languageProvider.getTranslation('birth_date'),
-                prefixIcon: const Icon(Icons.calendar_today, color: AppColors.emmiRed),
-                suffixIcon: const Icon(Icons.arrow_drop_down, color: AppColors.emmiRed),
+                prefixIcon: const Icon(
+                  Icons.calendar_today,
+                  color: AppColors.emmiRed,
+                ),
+                suffixIcon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: AppColors.emmiRed,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppColors.emmiRed, width: 2),
+                  borderSide: const BorderSide(
+                    color: AppColors.emmiRed,
+                    width: 2,
+                  ),
                 ),
               ),
               validator: (value) {
@@ -466,20 +493,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
             ),
             const SizedBox(height: 30),
-            
+
             // Phone
             TextFormField(
               controller: _phoneController,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(
                 labelText: languageProvider.getTranslation('phone'),
-                prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.emmiRed),
+                prefixIcon: const Icon(
+                  Icons.phone_outlined,
+                  color: AppColors.emmiRed,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppColors.emmiRed, width: 2),
+                  borderSide: const BorderSide(
+                    color: AppColors.emmiRed,
+                    width: 2,
+                  ),
                 ),
               ),
               validator: (value) {
@@ -489,22 +522,28 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Address
             TextFormField(
               controller: _addressController,
               maxLines: 3,
               decoration: InputDecoration(
                 labelText: languageProvider.getTranslation('address'),
-                prefixIcon: const Icon(Icons.location_on_outlined, color: AppColors.emmiRed),
+                prefixIcon: const Icon(
+                  Icons.location_on_outlined,
+                  color: AppColors.emmiRed,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppColors.emmiRed, width: 2),
+                  borderSide: const BorderSide(
+                    color: AppColors.emmiRed,
+                    width: 2,
+                  ),
                 ),
               ),
               validator: (value) {
@@ -514,21 +553,27 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // City
             TextFormField(
               controller: _cityController,
               decoration: InputDecoration(
                 labelText: languageProvider.getTranslation('city'),
-                prefixIcon: const Icon(Icons.location_city_outlined, color: AppColors.emmiRed),
+                prefixIcon: const Icon(
+                  Icons.location_city_outlined,
+                  color: AppColors.emmiRed,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppColors.emmiRed, width: 2),
+                  borderSide: const BorderSide(
+                    color: AppColors.emmiRed,
+                    width: 2,
+                  ),
                 ),
               ),
               validator: (value) {
@@ -569,20 +614,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
             ),
             const SizedBox(height: 30),
-            
+
             // Email
             TextFormField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: 'Email',
-                prefixIcon: const Icon(Icons.email_outlined, color: AppColors.emmiRed),
+                prefixIcon: const Icon(
+                  Icons.email_outlined,
+                  color: AppColors.emmiRed,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppColors.emmiRed, width: 2),
+                  borderSide: const BorderSide(
+                    color: AppColors.emmiRed,
+                    width: 2,
+                  ),
                 ),
               ),
               validator: (value) {
@@ -595,16 +646,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Password
             TextFormField(
               controller: _passwordController,
               obscureText: _obscurePassword,
               decoration: InputDecoration(
                 labelText: languageProvider.getTranslation('password'),
-                prefixIcon: const Icon(Icons.lock_outline, color: AppColors.emmiRed),
+                prefixIcon: const Icon(
+                  Icons.lock_outline,
+                  color: AppColors.emmiRed,
+                ),
                 suffixIcon: IconButton(
                   icon: Icon(
                     _obscurePassword ? Icons.visibility : Icons.visibility_off,
@@ -621,7 +675,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppColors.emmiRed, width: 2),
+                  borderSide: const BorderSide(
+                    color: AppColors.emmiRed,
+                    width: 2,
+                  ),
                 ),
               ),
               validator: (value) {
@@ -634,19 +691,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Confirm Password
             TextFormField(
               controller: _confirmPasswordController,
               obscureText: _obscureConfirmPassword,
               decoration: InputDecoration(
                 labelText: languageProvider.getTranslation('confirm_password'),
-                prefixIcon: const Icon(Icons.lock_outline, color: AppColors.emmiRed),
+                prefixIcon: const Icon(
+                  Icons.lock_outline,
+                  color: AppColors.emmiRed,
+                ),
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
+                    _obscureConfirmPassword
+                        ? Icons.visibility
+                        : Icons.visibility_off,
                     color: AppColors.emmiRed,
                   ),
                   onPressed: () {
@@ -660,7 +722,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppColors.emmiRed, width: 2),
+                  borderSide: const BorderSide(
+                    color: AppColors.emmiRed,
+                    width: 2,
+                  ),
                 ),
               ),
               validator: (value) {
@@ -673,9 +738,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Terms and Conditions
             CheckboxListTile(
               value: _termsAccepted,
@@ -687,10 +752,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               activeColor: AppColors.emmiRed,
               title: Text(
                 languageProvider.getTranslation('accept_terms'),
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Silka',
-                ),
+                style: const TextStyle(fontSize: 14, fontFamily: 'Silka'),
               ),
               controlAffinity: ListTileControlAffinity.leading,
               contentPadding: EdgeInsets.zero,

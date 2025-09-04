@@ -18,6 +18,7 @@
         "flutter_riverpod",
         "go_router",
         "image_picker",
+        "intl",
         "provider",
         "url_launcher"
       ],
@@ -59,6 +60,15 @@
         "test_api",
         "vector_math",
         "vm_service"
+      ]
+    },
+    {
+      "name": "intl",
+      "version": "0.20.2",
+      "dependencies": [
+        "clock",
+        "meta",
+        "path"
       ]
     },
     {

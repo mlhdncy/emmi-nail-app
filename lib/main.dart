@@ -27,7 +27,7 @@ import 'dart:html' as html show window;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Load environment variables (only for mobile platforms)
   if (!kIsWeb) {
     try {
@@ -36,7 +36,7 @@ void main() async {
       debugPrint("Environment file not found, using fallback values");
     }
   }
-  
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(
@@ -87,18 +87,19 @@ class AuthWrapper extends StatelessWidget {
           return const Scaffold(
             backgroundColor: AppColors.emmiWhite,
             body: Center(
-              child: CircularProgressIndicator(
-                color: AppColors.emmiRed,
-              ),
+              child: CircularProgressIndicator(color: AppColors.emmiRed),
             ),
           );
         }
-        
+
         // Firebase Auth'dan direkt kullanıcı bilgisi al
         if (snapshot.hasData && snapshot.data != null) {
           // Kullanıcı var, UserProvider'ı güncelle
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            final userProvider = Provider.of<UserProvider>(context, listen: false);
+            final userProvider = Provider.of<UserProvider>(
+              context,
+              listen: false,
+            );
             userProvider.loadUserData();
           });
           return const HomePage();
@@ -276,7 +277,7 @@ class _HomeContentState extends State<HomeContent> {
               controller: _scrollController,
               child: Column(
                 children: [
-                  // Üst bar - Dil ayarı, Logo ve butonlar
+                  // Üst bar - Logo ve şartlı butonlar
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -289,42 +290,56 @@ class _HomeContentState extends State<HomeContent> {
                             ),
                           ),
                         ),
-                        // Kayıt ve Giriş butonları - Sağ üst
-                        Column(
-                          children: [
-                            SizedBox(
-                              width: 100,
-                              child: EmmiButton(
-                                text: languageProvider.getTranslation(
-                                  'register',
+                        // Giriş yapılmamışsa kayıt ve giriş butonları göster
+                        StreamBuilder<User?>(
+                          stream: FirebaseAuth.instance.authStateChanges(),
+                          builder: (context, snapshot) {
+                            // Eğer kullanıcı giriş yapmışsa butonları gizle
+                            if (snapshot.hasData && snapshot.data != null) {
+                              return const SizedBox.shrink();
+                            }
+
+                            // Giriş yapılmamışsa butonları göster
+                            return Column(
+                              children: [
+                                SizedBox(
+                                  width: 100,
+                                  child: EmmiButton(
+                                    text: languageProvider.getTranslation(
+                                      'register',
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const RegistrationPage(),
+                                        ),
+                                      );
+                                    },
+                                    isPrimary: false,
+                                  ),
                                 ),
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RegistrationPage(),
+                                const SizedBox(height: 8),
+                                SizedBox(
+                                  width: 100,
+                                  child: EmmiButton(
+                                    text: languageProvider.getTranslation(
+                                      'login',
                                     ),
-                                  );
-                                },
-                                isPrimary: false,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            SizedBox(
-                              width: 100,
-                              child: EmmiButton(
-                                text: languageProvider.getTranslation('login'),
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginPage(),
-                                    ),
-                                  );
-                                },
-                                isPrimary: true,
-                              ),
-                            ),
-                          ],
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LoginPage(),
+                                        ),
+                                      );
+                                    },
+                                    isPrimary: true,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ],
                     ),
