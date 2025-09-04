@@ -1,0 +1,59 @@
+# Flutter
+.dart_tool/
+.packages
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Firebase (Sensitive - Never commit)
+.env
+firebase_options.dart
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+# Flutter
+.dart_tool/
+.packages
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Firebase (Sensitive - Never commit)
+.env
+firebase_options.dart
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large files
+*.zip
+*.rar
+*.7z
+*.tar.gz
+*.mp4
+*.avi
+*.mov
+
+# Log files
+*.log
+
+# Generated files
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+
+# Coverage
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
